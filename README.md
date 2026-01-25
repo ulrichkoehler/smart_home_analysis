@@ -14,15 +14,15 @@ Below are the key findings from the automated analysis:
 
 ### 1. Outlier Detection
 This chart highlights specific points in time where energy consumption was significantly higher than average.
-![Outliers](analysis%20results/01_outliers.png)
+![Outliers](analysis_results/01_outliers.png)
 
 ### 2. Consumption Clusters
 Using K-Means clustering, I identified distinct energy usage profiles, showing the difference between baseline consumption and peak activity.
-![Clusters](analysis%20results/02_clusters.png)
+![Clusters](analysis_results/02_clusters.png)
 
 ### 3. Daily Routines
 A visualization of energy consumption across different household zones (Kitchen, Laundry, Water-Heater & Air-Conditioner) based on the time of day.
-![Routines](analysis%20results/03_routines.png)
+![Routines](analysis_results/03_routines.png)
 
 ## Tech Stack
 * **Language:** Python
