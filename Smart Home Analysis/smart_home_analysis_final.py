@@ -6,7 +6,7 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 
 # Preparation: creating a designated folder to save the graphics
-output_dir = "analysis results"
+output_dir = "analysis_results"
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
     print(f"directory: {output_dir} was created successfully")
