@@ -4,12 +4,14 @@ import matplotlib.pyplot as plt
 import os
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
+from kneed import KneeLocator as KneedleLocator
 
 # Preparation: creating a designated folder to save the graphics
 output_dir = "analysis_results"
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
     print(f"directory: {output_dir} was created successfully")
+
 
 def load_and_prep_data(file_path):
     """
@@ -43,6 +45,7 @@ def load_and_prep_data(file_path):
     print("Shape of the final dataframe:", df.shape)
     return df
 
+
 def detect_outliers(df):
     """
     Identifies anomalies in daily power consumption using the
@@ -71,7 +74,46 @@ def detect_outliers(df):
     print("Graphic 01 (outliers) saved")
     return daily
 
-def perform_clustering(df, n_clusters = 3):
+
+def run_elbow_method(df, max_k = 6):
+    """
+    Determines the optimal number of clusters for K-Means using the Elbow method.
+    """
+    print('Running Elbow Method...')
+    hourly = df["Global_active_power"].resample("h").sum().to_frame()
+    hourly["hour"] = hourly.index.hour
+    hourly["date"] = hourly.index.date
+    cluster_input = hourly.pivot(index = "date", columns = "hour", values = "Global_active_power" ).dropna()
+
+    scaler = StandardScaler()
+    scaled_feature = scaler.fit_transform(cluster_input)
+
+    inertia_values = []
+    for k in range(1, max_k + 1):
+        kmeans = KMeans(n_clusters = k, random_state = 42, n_init = 5)
+        kmeans.fit(scaled_feature)
+        inertia_values.append(kmeans.inertia_)
+
+    # Visualization of the Elbow curve
+    plt.figure(figsize = (8, 4))
+    plt.plot(range(1, max_k + 1), inertia_values, marker = "o")
+    plt.title("Elbow Method for Optimal k")
+    plt.xlabel("Number of clusters (k)")
+    plt.ylabel("Inertia")
+    plt.xticks(range(1, max_k + 1))
+    plt.grid(True, alpha = 0.3)
+    plt.savefig(f"{output_dir}/02_elbow_method.png", dpi=300)
+    plt.close()
+    print("Graphic 02 (elbow method) saved")
+
+    # Kneedle
+    kl = KneedleLocator(range(1, max_k + 1), inertia_values, curve = 'convex', direction = "decreasing", S=1.0)
+    optimal_k = kl.knee
+    print(f"Optimal number of clusters determined by Elbow method: {optimal_k}")
+    return optimal_k
+
+
+def perform_clustering(df, n_clusters):
     """
     Groups days with similar consumption profiles using K-Means clustering.
     Transform raw time-series into a 24-hour feature matrix.
@@ -104,9 +146,9 @@ def perform_clustering(df, n_clusters = 3):
     plt.title("identified clusters")
     plt.xlabel("hour")
     plt.ylabel("usage in kW")
-    plt.legend(["cluster 1", "cluster 2", "cluster 3"])
+    plt.legend()
     plt.grid(True, alpha = 0.3)
-    plt.savefig(f"{output_dir}/02_clusters.png", dpi=300)
+    plt.savefig(f"{output_dir}/03_clusters.png", dpi=300)
     plt.close()
     print("Clustering done!")
     return cluster_input
@@ -130,10 +172,11 @@ def analyze_routines(df):
     plt.fill_between(heater_conditioner.index, heater_conditioner, color = "orange", alpha = 0.4, label = "water-heater & air-conditioner")
     plt.title("Routines per time of day")
     plt.legend()
-    plt.savefig(f"{output_dir}/03_routines.png", dpi=300)
+    plt.savefig(f"{output_dir}/04_routines.png", dpi=300)
     plt.close()
     print("Routines analyzed!")
     return kitchen, laundry_room, heater_conditioner
+
 
 # Main function
 if __name__ == "__main__":
@@ -144,16 +187,11 @@ if __name__ == "__main__":
         # Execution of the pipeline
         data = load_and_prep_data(path)
         detect_outliers(data)
-        perform_clustering(data)
+        optimal_k = run_elbow_method(data)
+
+        perform_clustering(data, n_clusters = optimal_k)
         analyze_routines(data)
         print("Analysis done!")
-
-
-
-
-
-
-
 
 
 
