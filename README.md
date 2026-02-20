@@ -14,15 +14,18 @@ Below are the key findings from the automated analysis:
 
 ### 1. Outlier Detection
 This chart highlights specific points in time where energy consumption was significantly higher than average.
-![Outliers](Smart%20Home%20Analysis/analysis_results/01_outliers.png)
+![Outliers](analysis_results/01_outliers.png)
 
-### 2. Consumption Clusters
+### 2. Determining Optimal Clusters (Elbow Method)
+To find the ideal number of consumer groups, I used the Elbow Method. The "bend" in the curve (the elbow) indicates the optimal balance between cluster granularity and model simplicity. In this case, $k=3$ or $k=4$ was chosen. 
+
+### 3. Consumption Clusters
 Using K-Means clustering, I identified distinct energy usage profiles, showing the difference between baseline consumption and peak activity.
-![Clusters](Smart%20Home%20Analysis/analysis_results/02_clusters.png)
+![Clusters](analysis_results/03_clusters.png)
 
-### 3. Daily Routines
+### 4. Daily Routines
 A visualization of energy consumption across different household zones (Kitchen, Laundry, Water-Heater & Air-Conditioner) based on the time of day.
-![Routines](Smart%20Home%20Analysis/analysis_results/04_routines.png)
+![Routines](analysis_results/04_routines.png)
 
 ## Tech Stack
 * **Language:** Python
