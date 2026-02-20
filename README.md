@@ -18,6 +18,7 @@ This chart highlights specific points in time where energy consumption was signi
 
 ### 2. Determining Optimal Clusters (Elbow Method)
 To find the ideal number of consumer groups, I used the Elbow Method. The "bend" in the curve (the elbow) indicates the optimal balance between cluster granularity and model simplicity. In this case, $k=3$ or $k=4$ was chosen. 
+![Clusters](analysis_results/03_clusters.png)
 
 ### 3. Consumption Clusters
 Using K-Means clustering, I identified distinct energy usage profiles, showing the difference between baseline consumption and peak activity.
