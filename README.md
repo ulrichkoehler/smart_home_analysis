@@ -22,7 +22,7 @@ Using K-Means clustering, I identified distinct energy usage profiles, showing t
 
 ### 3. Daily Routines
 A visualization of energy consumption across different household zones (Kitchen, Laundry, Water-Heater & Air-Conditioner) based on the time of day.
-![Routines](Smart%20Home%20Analysis/analysis_results/03_routines.png)
+![Routines](Smart%20Home%20Analysis/analysis_results/04_routines.png)
 
 ## Tech Stack
 * **Language:** Python
